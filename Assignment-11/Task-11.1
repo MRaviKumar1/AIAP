@@ -1,0 +1,88 @@
+# ...existing code...
+def find_common_set(a, b):
+    """Fast unique intersection (unordered)."""
+    return list(set(a) & set(b))
+
+
+def find_common_ordered_unique(a, b):
+    """Preserve order from `a`, return each common element once."""
+    b_set = set(b)
+    seen = set()
+    res = []
+    for x in a:
+        if x in b_set and x not in seen:
+            seen.add(x)
+            res.append(x)
+    return res
+
+
+def find_common_exact(a, b):
+    """Match original nested-loop semantics exactly:
+    for each element in `a` append it once per matching occurrence in `b`."""
+    from collections import Counter
+    b_counts = Counter(b)
+    res = []
+    for x in a:
+        count = b_counts.get(x, 0)
+        if count:
+            res.extend([x] * count)
+    return res
+# ...existing code...
+
+class Stack:
+    """Simple LIFO stack with basic operations."""
+    def __init__(self):
+        """Create an empty stack."""
+        self._data = []
+
+    def push(self, item):
+        """Push item onto the stack."""
+        self._data.append(item)
+
+    def pop(self):
+        """Pop and return the top item.
+
+        Raises
+        ------
+        IndexError
+            If the stack is empty.
+        """
+        if not self._data:
+            raise IndexError("pop from empty stack")
+        return self._data.pop()
+
+    def peek(self):
+        """Return the top item without removing it, or None if empty."""
+        return self._data[-1] if self._data else None
+
+    def is_empty(self):
+        """Return True if the stack is empty."""
+        return not self._data
+
+    def __len__(self):
+        """Return number of items in the stack."""
+        return len(self._data)
+
+    def __repr__(self):
+        return f"Stack({self._data!r})"
+
+# ...existing code...
+if __name__ == "__main__":
+    a = [1, 2, 2, 3]
+    b = [2, 2, 4]
+
+    print("original-like (exact):", find_common_exact(a, b))        # [2, 2, 2, 2]
+    print("ordered unique       :", find_common_ordered_unique(a, b))  # [2]
+    print("set intersection     :", find_common_set(a, b))         # [2]
+
+    # --- Stack demonstration ---
+    print("\n--- Stack demo ---")
+    s = Stack()
+    print("empty?", s.is_empty())
+    s.push(10)
+    s.push(20)
+    print("peek ->", s.peek())
+    print("pop  ->", s.pop())
+    print("len  ->", len(s))
+    print("pop  ->", s.pop())
+    print("empty?", s.is_empty())
