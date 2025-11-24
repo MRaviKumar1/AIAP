@@ -1,0 +1,48 @@
+def students_above_mean(records):
+    """
+    Computes the mean of student marks and returns:
+    - mean (float)
+    - list of (name, mark) for students strictly above mean
+    Raises ValueError for an empty list.
+    """
+    if not records:
+        raise ValueError("No student records provided.")
+
+    total = sum(mark for _, mark in records)
+    count = len(records)
+    mean = total / count
+
+    above = [(name, mark) for name, mark in records if mark > mean]
+
+    return mean, above
+    
+records = []
+
+try:
+    n = int(input("Enter number of students: ").strip())
+
+    if n <= 0:
+        raise ValueError("Number of students must be positive.")
+
+    for i in range(n):
+        print(f"\nStudent {i+1}:")
+        name = input("Enter student name: ").strip()
+        mark = float(input("Enter mark: ").strip())
+        records.append((name, mark))
+
+    mean_value, above_mean_students = students_above_mean(records)
+
+    print("\n========================")
+    print("        RESULTS")
+    print("========================")
+    print(f"Mean Marks: {mean_value}")
+
+    print("Students Above Mean:")
+    if above_mean_students:
+        for name, mark in above_mean_students:
+            print(f"- {name}: {mark}")
+    else:
+        print("No student is above the mean.")
+
+except Exception as e:
+    print("Error:", e)
